@@ -2,5 +2,5 @@
 # displays current directory in a list format
 for n in *;
 do
-    echo $n | cut -f 2- -d '-'
+    echo "$n" | cut -f 2- -d '-'
 done
