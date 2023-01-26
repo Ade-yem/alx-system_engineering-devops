@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# writes the fizzbuzz program
+
+for i in {1..100}
+do
+    [ $i % 3 == 0 && $i % 5 == 0 ] && echo "FizzBuzz" || [ $i % 3 == 0 ] && echo "Fizz" || [ $i % 5 == 0] && echo "Buzz" || echo $i
+done
