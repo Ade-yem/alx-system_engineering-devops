@@ -1,25 +1,34 @@
 #!/usr/bin/env bash
-#  script 101-manage_my_process that manages manage_my_process
+#Bash script that creates a subprocess
+. /lib/lsb/init-functions
 
-if [ "$1" == "start" ]
-then
+PIDFILE=/var/run/my_process.pid
+
+start() {
     ./manage_my_process &
-    echo $$ > /var/run/my_process.pid
-    echo "manage_my_process started"
+    echo "$!" > "$PIDFILE"
+}
 
-elif [ "$1" == "stop" ]
-then
-    kill "$(pgrep -f /manage_my_process)" && rm /var/run/my_process.pid
-    echo "manage_my_process stopped"
+stop() {
+    sudo kill -15 "$(cat "$PIDFILE")" && rm -f "$PIDFILE"
+}
 
-elif [ "$1" == "restart" ]
-then
-    kill "$(pgrep -f /manage_my_process)"
-    rm /var/run/my_process.pid
-    ./manage_my_process &
-    echo $$ > /var/run/my_process.pid
-    echo "manage_my_process restarted"
+case "$1" in
+    start)
+	start
+	echo "manage_my_process started"
+	;;
+    stop)
+	stop
+	echo "manage_my_process stopped"
+	;;
+    restart)
+	stop
+	start
+	echo "manage_my_process restarted"
+	;;
+    *)
+	echo "Usage: manage_my_process {start|stop|restart}"
+esac
 
-else
-    echo "Usage: manage_my_process {start|stop|restart}"
-fi
+exit 0
