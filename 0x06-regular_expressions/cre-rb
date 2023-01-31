@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+echo name of the file
+read name
+echo "creating $name file"
+touch $name
+chmod a+x $name
+echo -e "#!/usr/bin/env ruby\nputs ARGV[0].scan(/127.0.0.[0-9]/).join" >> $name
+emacs $name
