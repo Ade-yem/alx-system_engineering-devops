@@ -1,0 +1,6 @@
+# This is the ssh client system-wide configuration file
+
+Host remote_host
+    Hostname 100.26.235.207
+    User ubuntu
+    IdentityFile ~/.ssh/school
