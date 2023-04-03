@@ -8,17 +8,8 @@ echo "Hello World!" > /var/www/html/index.nginx-debian.html
 sudo sed -i '/listen 80 default_server/a rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
 
 # Create custom 404 HTML page
-sudo bash -c "cat <<EOF > /usr/share/nginx/html/404.html
-<!DOCTYPE html>
-<html>
-<head>
-    <title>404 Not Found</title>
-</head>
-<body>
-    <h1>404 Not Found</h1>
-    <p>Ceci n'est pas une page</p>
-</body>
-</html>
+sudo bash -c "cat <<EOF > /var/www/html/404.html
+Ceci n'est pas une page
 EOF"
 
 # Configure custom 404 page
