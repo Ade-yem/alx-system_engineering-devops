@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Install nginx on your web-01 server
+sudo apt-get -y update
+sudo apt-get -y install nginx
+sudo chown -R $USER:$USER /var/www
+sudo ufw allow 'Nginx HTTP'
+echo "Hello World!" > /var/www/html/index.nginx-debian.html
+sudo sed -i '/listen 80 default_server/a rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
+
+# Create custom 404 HTML page
+sudo bash -c "cat <<EOF > /var/www/html/404.html
+Ceci n'est pas une page
+EOF"
+
+# Configure custom 404 page
+sudo sed -i '/^\tlocation \/ {$/a \\n\terror_page 404 \/404.html;\n\tlocation = \/404.html {\n\t\tinternal;\n\t}\n' /etc/nginx/sites-available/default
+# sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\tadd_header X-Served-By \"$HOSTNAME\";/" /etc/nginx/nginx.conf
+sed -i '0,/location \/ {/ s//location \/ {\n\tadd_header X-Served-By $HOSTNAME;\n/' /etc/nginx/sites-available/default
+
+sudo nginx -t && sudo service nginx restart
