@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
 # script fixes the port nginx listens to
-sudo sed -i 's/listen [::]:8080 default_server ipv6only=on;/listen [::]:80 default_server ipv6only=on;/' /etc/nginx/sites-enabled/default
-sudo sed -i '0,/listen 8080 default_server;/ s//listen 80 default_server;/' /etc/nginx/sites-enabled/default
-sudo service nginx restart
+sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+sudo service nginx start
