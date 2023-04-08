@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Define function to output subdomain information
+output_subdomain_info() {
+    subdomain=$1
+    record_type=$(dig $subdomain.$domain | grep -A1 'ANSWER SECTION:' | grep -v 'ANSWER SECTION:' | awk '{print toupper($4)}')
+    destination=$(dig +short $subdomain.$domain)
+
+    if [[ -z "$destination" ]]; then
+        echo "No record found for $subdomain.$domain"
+    else
+        echo "The subdomain $subdomain is a $record_type record and points to $destination"
+    fi
+}
+
+# Get domain and subdomain arguments
+domain=$1
+subdomain=$2
+
+# If subdomain is not provided, set default subdomains
+if [[ -z "$subdomain" ]]; then
+    subdomains=("www" "lb-01" "web-01" "web-02")
+else
+    subdomains=("$subdomain")
+fi
+
+# Loop through subdomains and output information
+for subdomain in "${subdomains[@]}"; do
+    output_subdomain_info $subdomain
+done
