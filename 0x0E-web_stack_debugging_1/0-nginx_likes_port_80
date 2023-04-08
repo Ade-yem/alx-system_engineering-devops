@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# script fixes the port nginx listens to
+sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+sudo service nginx start
