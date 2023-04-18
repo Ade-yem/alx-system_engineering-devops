@@ -1,9 +1,3 @@
 #!/usr/bin/env bash
-# Check that the user argument was provided
-if [ -z "$1" ]; then
-  echo "Error: Please provide a user as an argument."
-  exit 1
-fi
-
 # Run the whoami command as the specified user
 su $1 -c "whoami"
