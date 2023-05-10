@@ -6,23 +6,24 @@ the function should return None."""
 import requests
 
 
-def recurse(subreddit, hot_list=[], after=None):
+def recurse(subreddit, hot_list=[], after=None, count=0):
     """ recursive function that queries the Reddit API and
     returns a list containing the titles of all hot articles
     for a given subreddit."""
     url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
     headers = {"User-Agent": "Mozilla/5.0"}
-    params = {"limit": 100, "after": after}
+    params = {"limit": 100, "after": after, "count": count}
     response = requests.get(url, headers=headers, params=params,
                             allow_redirects=False)
 
-    if response.status_code == 200:
-        data = response.json()
-        if data["data"]["children"]:
-            for post in data["data"]["children"]:
-                hot_list.append(post["data"]["title"])
-            return recurse(subreddit, hot_list, data["data"]["after"])
-        else:
-            return hot_list
-    else:
+    if response.status_code != 200:
         return None
+
+    results = response.json().get("data")
+    after = results.get("after")
+    count += results.get("dist")
+    for c in results.get("children"):
+        hot_list.append(c.get("data").get("title"))
+    if after is not None:
+        return recurse(subreddit, hot_list, after, count)
+    return hot_list
